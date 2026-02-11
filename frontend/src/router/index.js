@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'Main',
-    component: () => import('@/views/VAMS.vue'),
+    component: () => import('@/views/MPMS.vue'),
     meta: { requiresAuth: true }
   },
   {
@@ -17,18 +17,6 @@ const routes = [
     path: '/fishing',
     name: 'Fishing',
     component: () => import('@/views/FishingView.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/decision',
-    name: 'Decision',
-    component: () => import('@/views/DecisionView.vue'),
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/tracking',
-    name: 'Tracking',
-    component: () => import('@/views/TracingView.vue'),
     meta: { requiresAuth: true }
   },
   {

@@ -5,7 +5,7 @@ const hexColor = ['#FF5733', '#33FF57', '#3357FF', '#FF33A1', '#33FFF5', '#FFC30
 
 export default async function Districtmap (map, enablePolygon = false, getDataByPolygon) {
   const layer = new VectorLayer('districtmap').addTo(map)
-  layer.setOptions({ cursor: 'auto' })
+  layer.config({ cursor: 'auto' })
 
   let districtmapList = []
   const config = localStorage.getItem('districtmapConfig')

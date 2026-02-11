@@ -1,41 +1,47 @@
 <template>
-  <section class="list d-flex f-d-column" v-if="show">
-    <div class="header d-flex a-i-center">
+  <section class="vessel-dock" :class="{ open: show }">
+    <button class="dock-handle" @click="$emit('list:toggle')">
       <span>선박 목록</span>
-      <button @click="emit('list:close')"><f-a-icon icon="x" /></button>
-    </div>
-
-    <div class="table-wrapper">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>IDX</th>
-            <th>MMSI</th>
-            <th>Ship Name</th>
-            <th>Flag Country</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="data" v-for="s in currentPageContent" :key="s.vesselid" @click="currentVessel = s">
-            <td class="d-flex j-c-center">{{ s.idx }}</td>
-            <td>{{ s.mmsi }}</td>
-            <td>{{ s.shipname }}</td>
-            <td>{{ s.flagcountry }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="pagination d-flex j-c-center">
-      <button class="chevron" @click="decreasePageNum" :disabled="!decreasable"><f-a-icon
-          icon="chevron-left" /></button>
-      <button class="page" v-for="i in currentPageList" :key="i" @click="currentPage = i"
-        :disabled="currentPage === i">{{ i }}</button>
-      <button class="chevron" @click="increasePageNum" :disabled="!increasable"><f-a-icon
-          icon="chevron-right" /></button>
+      <span class="chev">{{ show ? '▼' : '▲' }}</span>
+    </button>
+    <!-- ✅ 펼쳐졌을 때만 본문 표시 -->
+    <div v-if="show" class="dock-panel">
+      <div class="dock-body">
+        <header class="dock-header">
+          <div class="title">Vessel List ({{ list?.length || 0 }})</div>
+          <button class="close" @click="$emit('list:close')">✕</button>
+        </header>
+        <div class="table-wrapper">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>IDX</th>
+                <th>MMSI</th>
+                <th>Ship Name</th>
+                <th>Flag Country</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="data" v-for="s in currentPageContent" :key="s.vesselid" @click="currentVessel = s">
+                <td class="d-flex j-c-center">{{ s.idx }}</td>
+                <td>{{ s.mmsi }}</td>
+                <td>{{ s.shipname }}</td>
+                <td>{{ s.flagcountry }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pagination d-flex j-c-center">
+          <button class="chevron" @click="decreasePageNum" :disabled="!decreasable"><f-a-icon
+              icon="chevron-left" /></button>
+          <button class="page" v-for="i in currentPageList" :key="i" @click="currentPage = i"
+            :disabled="currentPage === i">{{ i }}</button>
+          <button class="chevron" @click="increasePageNum" :disabled="!increasable"><f-a-icon
+              icon="chevron-right" /></button>
+        </div>
+      </div>
     </div>
   </section>
-
   <VesselInformation style="bottom: 10px;" v-if="show && currentVessel" :vessel="currentVessel" @info:close="currentVessel = null"
     @info:trajectory="emit('info:trajectory', currentVessel.mmsi)"
   />
@@ -120,6 +126,71 @@ defineExpose({
 </script>
 
 <style scoped>
+.vessel-dock {
+  position: absolute;
+  left: 5%;
+  bottom: 10%;
+  width: 450px;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* 핸들(topdown) */
+.dock-handle {
+  width: 100%;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(15,18,24,0.92);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.chev { opacity: 0.8; }
+
+/* 패널(펼친 내용) */
+.dock-panel {
+  margin-top: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(227, 227, 227, 0.92);
+  overflow: hidden;
+
+  /* ✅ 위로 확장되는 느낌: 높이 제한 + 내부 스크롤 */
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dock-header {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.dock-body {
+  overflow: auto;
+  padding: 10px;
+  color: #fff;
+}
+
+.close {
+  background: transparent;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.9;
+}
+/*  */
 .list {
   position: absolute;
   width: 450px;

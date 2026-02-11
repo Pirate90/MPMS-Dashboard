@@ -51,6 +51,18 @@ function initMap () {
     // await drawVesselLayer(data)
     drawMapGrid()
 
+    map.setPaintProperty('osm', 'raster-brightness-max', 0.35)
+    map.setPaintProperty('osm', 'raster-brightness-min', 0.05)
+    map.setPaintProperty('osm', 'raster-contrast', 0.6)
+    map.setPaintProperty('osm', 'raster-saturation', -1)
+    map.addLayer({
+      id: 'dark-overlay',
+      type: 'background',
+      paint: {
+        'background-color': '#000000',
+        'background-opacity': 0.35
+      }
+    })
     map.on('click', 'vessel-layer', (e) => {
       console.log(e.features[0].properties.mmsi)
     })

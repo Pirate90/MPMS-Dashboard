@@ -5,7 +5,8 @@ export default function initMap () {
     center: [127.4, 36.1],
     zoom: 7,
     baseLayer: new TileLayer('base', {
-      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+      urlTemplate: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+      subdomains: ['a', 'b', 'c', 'd']
       // cssFilter: 'grayscale(100%) invert(100%)'
     }),
     maxZoom: 20

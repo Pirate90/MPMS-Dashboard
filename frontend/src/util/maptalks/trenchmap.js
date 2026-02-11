@@ -23,7 +23,7 @@ function onHoverTrenchmap (layer, g) {
 
 export default async function Trenchmap (map) {
   const layer = new VectorLayer('trenchmap').addTo(map)
-  layer.setOptions({ cursor: 'auto' })
+  layer.config({ cursor: 'auto' })
   let trenchmap = null
 
   async function draw (type) {
